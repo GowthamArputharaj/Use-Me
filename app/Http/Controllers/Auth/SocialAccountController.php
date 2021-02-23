@@ -25,8 +25,8 @@ class SocialAccountController extends Controller
         $socialUserData = $this->getSocialUser($provider);
 
         $socialUser = $socialUserData->user ?? null;
-        
-        return view('dashboard', compact('socialUser'));
+        $_REQUEST['socialUser'] = $socialUser ?? null;
+        return redirect()->route('dashboard')->with(['socialUser', $socialUser]);
     }
 
     // returns Social details of user
@@ -37,18 +37,31 @@ class SocialAccountController extends Controller
         try {
             $socialUser = Socialite::driver($provider)->user();
     
-            $user = User::updateOrCreate(
-                ['email' => $socialUser->email],
-                ['name' => $socialUser->name]
-            );
-        
-            Auth::loginUsingId($user->id, true);
+            $user = User::where('email', $socialUser->email)->first();
+
+            if($user) {
+                $user->name = $socialUser->name ?? '';
+                $user->save();
+
+                Auth::loginUsingId($user->id, true);
+            } else {
+                $user = new User;
+                $user->email = $socialUser->email ?? '';
+                $user->name = $socialUser->name ?? '';
+                $user->save();
+
+                Auth::loginUsingId($user->id, true);
+
+            }
+
+            // Auth::loginUsingId($user->id, true);
             
             $social_account = SocialAccount::firstOrCreate(
                 ['user_id' => auth()->user()->id, 'provider_name' => $provider, 'provider_id' => $socialUser->id],
             );
-        
+
         } catch (Exception $e) {
+            dd($e);
             // return redirect()->route('login');
             // throw $e;
         }

@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +45,10 @@ class User extends Authenticatable
     public function social_accounts()
     {
         return $this->hasMany('App\Models\SocialAccount');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

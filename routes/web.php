@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialAccountController;
+use App\Http\Controllers\PostsController;
 use App\Models\SocialAccount;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -22,8 +24,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    $socialUser = $request->socialUser ?? null;
+    return view('dashboard', compact('socialUser'));
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
@@ -42,21 +45,26 @@ Route::get('/auth/callback', function () {
 
     $socialUserData = (new SocialAccountController)->getSocialUser('github');
 
-    $socialUser = $socialUserData->user;
+	$user = User::where('email', $socialUserData->email)->first();
 
-    return view('dashboard', compact('socialUser'));
+	if($user) {
+		Auth::loginUsingId($user->id);
+	}
+
+    $socialUser = $socialUserData->user ?? null;
+
+    return redirect()->route('dashboard')->with(['socialUser', $socialUser]);
     
 });
 
-Route::get('test', function ()
-{
-    $user = User::updateOrCreate(
-        ['email' => 'gowtham.amateur.id@gmail.com'],
-        ['name' => 'Gowtham Arputharajj']
-    );
 
-    Auth::loginUsingId($user->id);
+Route::get('posts-search', [PostsController::class, 'postSearch'])->name('posts.search');
+Route::get('posts-client-search', [PostsController::class, 'postSearch'])->name('posts.client-search');
+Route::resource('posts', PostsController::class)->middleware(['auth']);
 
 
-    dd($user, auth()->user()->id ?? 'wrong', auth(), auth()->user());
+
+Route::get('logt', function() {
+	Auth::logout();
+	return redirect()->route('login');
 });
