@@ -19,7 +19,10 @@
                         Posts
                     </x-nav-link>
                     <x-nav-link :href="route('posts.search')" :active="request()->routeIs('posts.search')">
-                        Post Search
+                        Search <span> (server side) </span>
+                    </x-nav-link>
+                    <x-nav-link :href="route('posts.client-search')" :active="request()->routeIs('posts.client-search')">
+                        Search <span> (client side) </span>
                     </x-nav-link>
                 </div>
             </div>

@@ -12,7 +12,7 @@
             <div class="flex flex-col">
                 <div class="px-10 py-4 mb-1 bg-gray-50 rounded-lg border border-gray-200 shadow-inner">
                     <form action="{{ route('posts.search') }}" method="get" class="flex justify-between ">
-                        <input class="border-none w-full" type="text" name="q" placeholder="Search within Database.." value="{{ old('q') }}">
+                        <input class="border-none w-full" type="text" name="q" placeholder="Search within Database.." value="{{ $q ?? '' }}">
                         <button class="mr-0 px-4 py-2 bg-blue-50 border border-blue-200 shadow shadow-lg shadow-inner">Search</button>
                     </form>
                 </div>
@@ -21,7 +21,7 @@
                         @foreach ($posts as $key => $post)
                             <div class="mx-8 mb-4 bg-green-10 border border-green-20 shadow shadow-md px-8 py-6">
                                 <div class="pt-4 flex justify-between">
-                                    <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="text-md">
+                                    <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="text-md font-bold">
                                         Title : {{ $post->title ?? '-'}}
                                     </a>
                                     @if ($post->published)
@@ -33,19 +33,26 @@
                                 </div>
                                 <div class="text-left pt-2 ">
                                     <span class="text-sm">
-                                        {{ mb_substr($post->content ?? '', 0, 30) }}...
+                                        {{ mb_substr($post->content ?? '', 0, 200) }}...
                                     </span>
                                 </div>
                             </div>
                         @endforeach
                     @else
-                        <div class="mx-6 bg-red-50 py-4 border border-red-200 shadow-md shadow-inner rounded mt-8 text-center">
-                            <span class="text-lg capitalise text-center">
-                                No post found
-                            </span>
-                        </div>
+                        @if (isset($q) && $q != null && $q != '')
+                            <div class="mx-6 bg-red-50 py-4 border border-red-200 shadow-md shadow-inner rounded mt-8 text-center">
+                                <span class="text-lg capitalise text-center">
+                                    No post found
+                                </span>
+                            </div>
+                        @else 
+                            <div class="mx-6 bg-green-50 py-40 border border-green-200 shadow-md shadow-inner rounded mt-8 text-center">
+                                <span class="mb-0 text-lg capitalise text-center">
+                                    Search posts..
+                                </span>
+                            </div>
+                        @endif
                     @endif
-                    
                 </div>
                 @if (count($posts) > 0)
                     <div class="mt-4 mb-8 px-10 py-4 mb-2 rounded-lg border border-gray-200 shadow-inner ">

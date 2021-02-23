@@ -10,14 +10,21 @@ require('./g_custom.js');
 
 
 import $ from 'jquery';
+
+import Vue from 'vue';
+import App from './components/App.vue';
+import InstantSearch from 'vue-instantsearch';
+
+Vue.use(InstantSearch);
+
 window.$ = window.jQuery = $;
 
+new Vue({
+  el: '#app',
+  render: h => h(App),
+});
 
 // window.Vue = require('vue').default;
-
-// import InstantSearch from "vue-instantsearch";
-
-// Vue.use(InstantSearch);
 
 /**
  * The following block of code may be used to automatically register your

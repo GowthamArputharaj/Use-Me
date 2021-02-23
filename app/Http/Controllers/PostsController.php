@@ -69,6 +69,7 @@ class PostsController extends Controller
         if($post) {
             return view('posts.show')->with(['post' => $post]);
         } else {
+            Session::flash('error', 'Post not found!');
             return view('posts.index');
         }
     }
@@ -134,16 +135,20 @@ class PostsController extends Controller
     {
         $posts = [];
 
+        
+
         if($request->has('q')) {
-            #user is expecting search result
-            $posts = Post::search($request->q)->paginate();
+            if(trim($request->q) != '') {
+                #user is expecting search result
+                $posts = Post::search($request->q)->paginate();
+            }
         }
 
-        return view('posts.search')->with(['posts' => $posts]);
+        return view('posts.search')->with(['posts' => $posts, 'q' => $request->q ?? '']);
     }
 
     public function postClientSearch(Request $request)
     {
-        return view('posts.clientSearch');
+        return view('layouts.vue.vue-algolia');
     }
 }

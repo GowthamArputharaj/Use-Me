@@ -58,8 +58,8 @@ Route::get('/auth/callback', function () {
 });
 
 
-Route::get('posts-search', [PostsController::class, 'postSearch'])->name('posts.search');
-Route::get('posts-client-search', [PostsController::class, 'postSearch'])->name('posts.client-search');
+Route::get('posts-server-search', [PostsController::class, 'postSearch'])->name('posts.search');
+Route::get('posts-client-search', [PostsController::class, 'postClientSearch'])->name('posts.client-search');
 Route::resource('posts', PostsController::class)->middleware(['auth']);
 
 

@@ -75,9 +75,11 @@
 
                     </div>
                 </div>
-                <div class="mt-4 mb-8 px-10 py-4 mb-2 rounded-lg border border-gray-200 shadow-inner ">
-                    {{ $posts->links() }}
-                </div>
+                @if (isset($posts) && count($posts) > 0)
+                    <div class="mt-4 mb-8 px-10 py-4 mb-2 rounded-lg border border-gray-200 shadow-inner ">
+                        {{ $posts->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

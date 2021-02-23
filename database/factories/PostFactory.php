@@ -25,8 +25,8 @@ class PostFactory extends Factory
         $userIds = User::get()->pluck('id');
         return [
             'user_id' => $this->faker->randomElement($userIds),
-            'title' => $this->faker->text(rand(7, 15)),
-            'content' => $this->faker->text(rand(50, 100)),
+            'title' => $this->faker->text(rand(20, 35)),
+            'content' => $this->faker->text(rand(500, 700)),
             'published' => $this->faker->randomElement([true, false])
         ];
     }

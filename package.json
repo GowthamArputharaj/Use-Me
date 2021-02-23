@@ -30,7 +30,10 @@
     },
     "dependencies": {
         "algoliasearch": "^4.8.5",
+        "instantsearch.css": "^7.4.5",
         "mkdirp": "^1.0.4",
-        "vue": "^2.6.12"
+        "vue": "^2.6.12",
+        "vue-instantsearch": "^3.4.3",
+        "vue-server-renderer": "^2.6.12"
     }
 }

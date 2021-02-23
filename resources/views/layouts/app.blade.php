@@ -58,6 +58,7 @@
             <!-- Page Content -->
             <main>
                 {{ $slot }}
+                {{-- <div id="app"></div> --}}
             </main>
         </div>
     </body>
